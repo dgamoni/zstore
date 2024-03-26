@@ -146,6 +146,28 @@ function wwp_get_wholesale_price($price){
 
 return $price;	
 }
+		// ! fix bug get price decimal
+		 function site_woocommerce_get_price($price, $product) {
+			$decimal_sep = wp_specialchars_decode(stripslashes(get_option('woocommerce_price_decimal_sep')), ENT_QUOTES);
+			if ($decimal_sep != '.')
+			$price = str_replace($decimal_sep, '.', $price);
+		return $price;
+		}
+		add_filter('woocommerce_get_price', 'site_woocommerce_get_price', 10, 2);
+
+		function site_woocommerce_get_price2($price, $product) {
+		    $decimal_sep = wp_specialchars_decode(stripslashes(get_option('woocommerce_price_decimal_sep')), ENT_QUOTES);
+
+		    if ($decimal_sep != '.') {
+		        $thousands_sep = wp_specialchars_decode(stripslashes(get_option( 'woocommerce_price_thousand_sep')), ENT_QUOTES);
+
+		        $price = str_replace($thousands_sep, '', $price);
+		        $price = str_replace($decimal_sep, '.', $price);
+		    }
+
+		    return $price;
+		}
+		//add_filter('woocommerce_get_price', 'site_woocommerce_get_price2', 10, 2);
 
 add_action( 'woocommerce_product_after_variable_attributes', 'variation_settings_fields', 10, 3 );
 function variation_settings_fields( $loop, $variation_data, $variation ) {
@@ -316,6 +338,12 @@ function wpp_mini_cart_prices( $product_price, $values, $cart_item) {
 		if($result->option_name == woo_get_enabled_user_role()){
 			$varwp = get_post_meta( $values['variation_id'], $finaldata, true );
 			$varnp = get_post_meta( $values['variation_id'], '_price', true );
+			$decimal_sep = wp_specialchars_decode(stripslashes(get_option('woocommerce_price_decimal_sep')), ENT_QUOTES);
+			if ($decimal_sep != '.'){
+				$varnp = str_replace($decimal_sep, '.', $varnp);
+				$varwp = str_replace($decimal_sep, '.', $varwp);
+			}
+	
 			$simplewp = get_post_meta( $values['product_id'], $finaldata, true );
 			$simplenp = get_post_meta( $values['product_id'], '_price', true );
 			if ($values['variation_id'] > 0 ){

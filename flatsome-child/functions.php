@@ -86,7 +86,7 @@ function wpdev_170663_remove_parent_theme_stuff() {
 
 function woocommerce_template_single_add_to_cart() {
     global $product;
-     if ( is_user_logged_in() )
+ //    if ( is_user_logged_in() )
         do_action( 'woocommerce_' . $product->product_type . '_add_to_cart'  );
 }
 
@@ -139,35 +139,22 @@ function custom_js_child () {
 	        $input.parent().next('div.add-to-cart-button').find('.ajax_add_to_cart').data('quantity',  $input.val()); 
 	    });
 
+	    // fix
+
+
 	});
+
+
+	
 	</script>
 <?php
 } 
 add_action( 'wp_footer', 'custom_js_child', 50 );
 
-
-
-
-
-// ! fix bug get price decimal
- function site_woocommerce_get_price($price, $product) {
-	$decimal_sep = wp_specialchars_decode(stripslashes(get_option('woocommerce_price_decimal_sep')), ENT_QUOTES);
-	if ($decimal_sep != '.')
-	$price = str_replace($decimal_sep, '.', $price);
-return $price;
+// Variations min max
+//add_filter( 'woocommerce_available_variation', 'jk_woocommerce_available_variation' );
+function jk_woocommerce_available_variation( $args ) {
+    $args['max_qty'] = 80;                   // Maximum value (variations)
+    $args['min_qty'] = 1;                   // Minimum value (variations)
+    return $args;
 }
-add_filter('woocommerce_get_price', 'site_woocommerce_get_price', 10, 2);
-
-function site_woocommerce_get_price2($price, $product) {
-    $decimal_sep = wp_specialchars_decode(stripslashes(get_option('woocommerce_price_decimal_sep')), ENT_QUOTES);
-
-    if ($decimal_sep != '.') {
-        $thousands_sep = wp_specialchars_decode(stripslashes(get_option( 'woocommerce_price_thousand_sep')), ENT_QUOTES);
-
-        $price = str_replace($thousands_sep, '', $price);
-        $price = str_replace($decimal_sep, '.', $price);
-    }
-
-    return $price;
-}
-//add_filter('woocommerce_get_price', 'site_woocommerce_get_price2', 10, 2);

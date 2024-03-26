@@ -84,7 +84,7 @@ if($flatsome_opt['html_intro'] && is_front_page()) echo '<div class="home-intro"
 
 			                        <?php if(ux_is_woocommerce_active() && $flatsome_opt['show_cart'] == 'top_bar') { ?>
 
-				                        <?php if ( is_user_logged_in() ) { ?>
+				                        <?php //if ( is_user_logged_in() ) { ?>
 											<li class="mini-cart-top-bar">
 													<a href="<?php echo esc_url( $woocommerce->cart->get_cart_url() ); ?>">
 														<strong ><?php _e('Cart', 'woocommerce'); ?></strong> 
@@ -92,7 +92,7 @@ if($flatsome_opt['html_intro'] && is_front_page()) echo '<div class="home-intro"
 														<span class="label"><?php echo $woocommerce->cart->cart_contents_count; ?></span>
 													</a>
 											</li><!-- .mini-cart -->
-										<?php } ?><!-- end is_user_logged_in -->
+										<?php //} ?><!-- end is_user_logged_in -->
 										
 									<?php } ?>
 
