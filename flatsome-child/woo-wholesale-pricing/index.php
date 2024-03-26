@@ -16,7 +16,7 @@ added function for other plugins to hook into
 
 require_once('options-page.php');
 $v = '2.1.7';
-update_option('wholesale_prices_version', $v);
+//update_option('wholesale_prices_version', $v);
 
 function wwp_is_enabled(){
 	//empty function so other plugins can hook in.
@@ -108,22 +108,24 @@ function wwp_get_wholesale_price($price){
 			$res = round($res, 2);
 			
 			if ($wholesale !=''){
-		
+				
+				$price =''; //update no visible woo retail
+
 				// regular tile
 				if ($wwo_rrp != '') {
 					// if sale	
 					if ($sale_price) {
-						$price = '<div class="woo_retail"><span class="woo_retail_label">'.$wwo_rrp.':</span> <del>'. woocommerce_price($sale_price).'</del></div>';
+						//$price = '<div class="woo_retail"><span class="woo_retail_label">'.$wwo_rrp.':</span> <del>'. woocommerce_price($sale_price).'</del></div>';
 					} else {
-						$price = '<div class="woo_retail"><span class="woo_retail_label">'.$wwo_rrp.':</span> <del>'. woocommerce_price($rrp).'</del></div>';
+						//$price = '<div class="woo_retail"><span class="woo_retail_label">'.$wwo_rrp.':</span> <del>'. woocommerce_price($rrp).'</del></div>';
 					}
 				// not title
 				} else {
 					if ($sale_price) {
 						// if sale	
-						$price = '<div class="woo_retail"><del>'. woocommerce_price($sale_price).'</del></div>';
+						//$price = '<div class="woo_retail"><del>'. woocommerce_price($sale_price).'</del></div>';
 					} else {
-						$price = '<div class="woo_retail"><del>'. woocommerce_price($rrp).'</del></div>';
+						//$price = '<div class="woo_retail"><del>'. woocommerce_price($rrp).'</del></div>';
 					}
 				}	//end if regular title
 
@@ -215,7 +217,9 @@ function wwp_custom_variation_price( $price, $product ) {
 	$results = $wpdb->get_results( 'SELECT * FROM '.$table_name.' WHERE option_value = "enable_role"' );
 	foreach ($results as $result){
 		$ifwholesale = str_replace("wholesale_customer","wholesale",$result->option_name);
+		//var_dump($result->option_name);
 		$finaldata = str_replace("wwo_enable_","_",$ifwholesale).'_price';
+		//var_dump($finaldata);
 		$finalno = str_replace("wwo_enable_","",$ifwholesale).'_price';
 		if($result->option_name == woo_get_enabled_user_role()){
 			$variations = $product->get_available_variations();
@@ -224,18 +228,28 @@ function wwp_custom_variation_price( $price, $product ) {
 			foreach ($variations as $variation){
 				$lowestvar[] = get_post_meta($variation['variation_id'], $finaldata, true);
 				$lowestnor[] = get_post_meta($variation['variation_id'],'_price', true);
-				$wholesale_price[] = get_post_meta($variation['variation_id'],'_wholesale_price', true);
+				// $wholesale_price[] = get_post_meta($variation['variation_id'],'_wholesale_price', true);
+				$wholesale_price[] = get_post_meta($variation['variation_id'], $finaldata, true);
 				array_multisort($lowestvar, SORT_ASC);
 				array_multisort($lowestnor, SORT_ASC);
 				array_multisort($wholesale_price, SORT_ASC);
 			}
+			//var_dump($wholesale_price);
+			// var_dump($wholesale_price[$key_min]);
+			// var_dump($wholesale_price[$key_max]);
+			//var_dump(get_post_meta($variation['variation_id']));
 	
 			$lrrp = min($lowestnor);
 			$hrrp = max($lowestnor);
 			$lwrrp = min($lowestvar);
 			$hwrrp = max($lowestvar);
-			$wholesale_price_min = min($wholesale_price);
-			$wholesale_price_max = max($wholesale_price);	
+			// fix 6-08-17
+			// $wholesale_price_min = min($wholesale_price);
+			// $wholesale_price_max = max($wholesale_price);
+			$key_min = array_search(min(array_map('floatval',$wholesale_price)), $wholesale_price);
+			$key_max = array_search(max(array_map('floatval',$wholesale_price)), $wholesale_price);
+			$wholesale_price_min = $wholesale_price[$key_min];
+			$wholesale_price_max = $wholesale_price[$key_max];	
 			
 			$wwo_percentage = get_option( 'wwo_percentage' );
 			$wwo_savings = get_option( 'wwo_savings_label' );
@@ -261,8 +275,9 @@ function wwp_custom_variation_price( $price, $product ) {
 
 			// output
 			if ($wholesale_price_min && $wholesale_price_max) {
-				$price = '<div class="woo_retail">'.$wwo_rrp_html.' <del><span class="woo_retail_price">'.woocommerce_price($lrrp).'-'.woocommerce_price($hrrp).'</span></del></div>';	
-				$price .= '<div class="woo_wholesale">'.$wwo_wholesale_label_html.' <span class="woo_wholesale_price">'.get_woocommerce_currency_symbol().$wholesale_price_min. '-'.get_woocommerce_currency_symbol().$wholesale_price_max.'</span></div>'; 
+				// $price = '<div class="woo_retail">'.$wwo_rrp_html.' <del><span class="woo_retail_price">'.woocommerce_price($lrrp).'-'.woocommerce_price($hrrp).'</span></del></div>';	
+				// $price .= '<div class="woo_wholesale">'.$wwo_wholesale_label_html.' <span class="woo_wholesale_price">'.get_woocommerce_currency_symbol().$wholesale_price_min. '-'.get_woocommerce_currency_symbol().$wholesale_price_max.'</span></div>'; 
+				$price = '<div class="woo_wholesale">'.$wwo_wholesale_label_html.' <span class="woo_wholesale_price">'.get_woocommerce_currency_symbol().$wholesale_price_min. '-'.get_woocommerce_currency_symbol().$wholesale_price_max.'</span></div>';
 			}
 
 		}
@@ -276,8 +291,12 @@ function wwp_update_dropdown_variation_price( $data, $product, $variation ) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . "options"; 	
 	$results = $wpdb->get_results( 'SELECT * FROM '.$table_name.' WHERE option_value = "enable_role"' );
+	//var_dump($results);
 	foreach ($results as $result){
+		//var_dump($result->option_name);
+		//var_dump(woo_get_enabled_user_role());
 		$ifwholesale = str_replace("wholesale_customer","wholesale",$result->option_name);
+		//var_dump($ifwholesale);
 		// wwo_enable_wholesale_customer
 		// wwo_enable_wholesale
 		$finaldata = str_replace("wwo_enable_","_",$ifwholesale).'_price';
@@ -286,7 +305,10 @@ function wwp_update_dropdown_variation_price( $data, $product, $variation ) {
 		//$wholesalep = get_post_meta( $data['variation_id'], 'wholesale_price', true );
 		
 		// wwo_enable_wholesale_customer" string(24) "wwo_enable_administrator"
-		if($result->option_name == 'wwo_enable_wholesale_customer'){
+		 //var_dump($wholesalep);
+
+		//if($result->option_name == 'wwo_enable_wholesale_customer'){
+		if($result->option_name == woo_get_enabled_user_role()){
 			if ($wholesalep !== ''){
    				// $data['price_html'] = '<span class="price">'.woocommerce_price($wholesalep).'</span>'; 
    				$data['price_html'] = '<span class="price">'.get_woocommerce_currency_symbol().($wholesalep).'</span>'; 
@@ -530,3 +552,22 @@ function wwp_exclude_products($query) {
 	}
 }
 add_filter( 'pre_get_posts', 'wwp_exclude_products' );
+
+// update dgamoni 16-07-16
+// replace woocommerce_variable_add_to_cart
+// function woocommerce_variable_add_to_cart() {
+// 	global $product;
+
+// 	// Enqueue variation scripts
+// 	wp_enqueue_script( 'wc-add-to-cart-variation' );
+
+// 	// Get Available variations?
+// 	$get_variations = sizeof( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
+
+// 	// Load the template
+// 	wc_get_template( 'single-product/add-to-cart/variable.php', array(
+// 		'available_variations' => $get_variations ? $product->get_available_variations() : false,
+// 		'attributes'           => $product->get_variation_attributes(),
+// 		'selected_attributes'  => $product->get_variation_default_attributes()
+// 	) );
+// }

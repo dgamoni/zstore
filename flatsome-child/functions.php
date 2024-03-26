@@ -120,32 +120,12 @@ function custom_js_child () {
 
 	jQuery(document).ready(function($){
 
-		$('.custom_info .quantity').addClass('buttons_added').append('<input type="button" value="+" class="plus" />').prepend('<input type="button" value="-" class="minus" />');
+		  // $('.woocommerce-cart').arrive(".shop_table",  {fireOnAttributesModification: true}, function() {
+		  //     $(this).addQty();
+		  // });
 
-	    $('.custom_info .quantity').on('click', '.plus', function(e) {
-	        $input = $(this).prev('input.qty');
-	        var val = parseInt($input.val());
-	        $input.val( val+1 ).change();
-	        $input.parent().next('div.add-to-cart-button').find('.ajax_add_to_cart').data('quantity',  $input.val());
-	    });
+	 });// end ready
 
-	    $('.custom_info .quantity').on('click', '.minus', 
-	        function(e) {
-	        $input = $(this).next('input.qty');
-	        var val = parseInt($input.val());
-	        if (val > 0) {
-	            $input.val( val-1 ).change();
-	        }
-	        $input.parent().next('div.add-to-cart-button').find('.ajax_add_to_cart').data('quantity',  $input.val()); 
-	    });
-
-	    // fix
-
-
-	});
-
-
-	
 	</script>
 <?php
 } 
@@ -158,3 +138,5 @@ function jk_woocommerce_available_variation( $args ) {
     $args['min_qty'] = 1;                   // Minimum value (variations)
     return $args;
 }
+
+

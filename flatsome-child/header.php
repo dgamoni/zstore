@@ -106,6 +106,90 @@ if($flatsome_opt['html_intro'] && is_front_page()) echo '<div class="home-intro"
 
 				</div><!-- .large-12 columns -->
 			</div><!-- .row -->
+
+			<!-- dgamoni add mobil link cart -->
+			<div class="row mobilcart">
+				<div class="large-12 columns">
+					<div class="left-text left">
+							<div class="html">
+								<ul id="menu-top-bar-menu" class="top-bar-nav">
+									<?php
+										if ( has_nav_menu( 'top_bar_nav' ) ) {
+											wp_nav_menu(array(
+												'theme_location' => 'top_bar_nav',
+												'container'       => false,
+												'items_wrap'      => '%3$s',
+												'depth' => 2,
+												'walker' => new FlatsomeNavDropdown
+											));
+										}
+										?>
+
+				                        <?php if(ux_is_woocommerce_active() && $flatsome_opt['myaccount_dropdown'] == 'top_bar') { ?>
+										<li class="account-dropdown menu-parent-item">
+											<?php
+											if ( is_user_logged_in() ) { ?> 
+											<a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" class="nav-top-link nav-top-login">
+												<?php _e('My Account', 'woocommerce'); ?>
+											</a>
+											<div class="nav-dropdown">
+												<ul>
+												<?php if ( has_nav_menu( 'my_account' ) ) { ?>
+												<?php  
+													wp_nav_menu(array(
+														'theme_location' => 'my_account',
+														'container'       => false,
+														'items_wrap'      => '%3$s',
+														'depth'           => 0,
+													));
+												?>
+												<?php } else if(!function_exists('wc_get_account_menu_items')) { ?>
+								                 <li>Define your My Account dropdown menu in <b>Appearance > Menus</b></li>
+						                        <?php } ?>
+						                        <?php if(function_exists('wc_get_account_menu_items') && $flatsome_opt['wc_account_links']){ ?>
+												    <?php foreach ( wc_get_account_menu_items() as $endpoint => $label ) : ?>
+														<li>
+															<a href="<?php echo esc_url( wc_get_account_endpoint_url( $endpoint ) ); ?>"><?php echo esc_html( $label ); ?></a>
+														</li>
+													<?php endforeach; ?>
+												<?php } ?>
+												</ul>
+										</div><!-- end account dropdown -->
+									
+											<?php } else { ?>
+											<a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" class="nav-top-link nav-top-not-logged-in" <?php if($flatsome_opt['account_login_style'] == 'lightbox'){
+										echo 'data-lightbox="#login-lightbox"';
+									}?>><?php _e('Login', 'woocommerce'); ?></a>
+											<?php } ?>						
+										</li>
+										<?php } // end My account dropdown ?>
+
+				                        <?php if(ux_is_woocommerce_active() && $flatsome_opt['show_cart'] == 'top_bar') { ?>
+
+					                        <?php //if ( is_user_logged_in() ) { ?>
+												<li class="mini-cart-top-bar">
+														<a href="<?php echo esc_url( $woocommerce->cart->get_cart_url() ); ?>">
+															<strong ><?php _e('Cart', 'woocommerce'); ?></strong> 
+															<span>/ <?php echo $woocommerce->cart->get_cart_subtotal(); ?></span> 
+															<span class="label"><?php echo $woocommerce->cart->cart_contents_count; ?></span>
+														</a>
+												</li><!-- .mini-cart -->
+											<?php //} ?><!-- end is_user_logged_in -->
+											
+										<?php } ?>
+
+										<?php if($flatsome_opt['topbar_right']) { ?>
+										<li class="html-block">
+											<div class="html-block-inner"><?php echo do_shortcode($flatsome_opt['topbar_right']); ?></div>
+										</li>
+										<?php } ?>
+								</ul>
+							</div>
+					</div>
+				</div>
+			</div>
+			<!-- end mobil link cart -->
+
 		</div><!-- .#top-bar -->
 		<?php }?>
 		<header id="masthead" class="site-header" role="banner">
