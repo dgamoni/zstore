@@ -23,6 +23,9 @@ ul.header-nav li.current-menu-item a.nav-top-link {
     opacity: 1;
 }
 
+.widget .brand-thumbnails, .brand-thumbnails li a {
+    margin-bottom: 20px;
+}
 
 @media only screen and (max-width: 48em) {
 /*************** ADD MOBILE ONLY CSS HERE  ***************/
@@ -30,7 +33,7 @@ ul.header-nav li.current-menu-item a.nav-top-link {
 
 }
 
-/*dgamoni*/
+/*dgamoni
 .custom_listview {
 	float: left;
 	padding-top: 40px;
@@ -40,4 +43,68 @@ ul.header-nav li.current-menu-item a.nav-top-link {
 		float: none;
 		padding-top: 0px;
 	}
+}
+.custom_info .buttons_added {
+	float: left;
+	margin-right: 15px;
+}
+.custom_info .buttons_added input {
+	margin-top: 15px;
+    margin-bottom: 15px;
+    
+}
+.custom_info .quantity.buttons_added .minus,
+.custom_info .quantity.buttons_added .plus,
+.custom_info .quantity .input-text.qty {
+	padding: 4px 10px 8px;
+	height: 32px;
+}
+.custom_info .added_to_cart.wc-forward {
+    margin-top: 18px;
+}
+.bundled_item_cart_details,
+.bundled_item_button {
+	width: 50%;
+    float: left;
+}
+.bundled_product_summary p.stock, .bundled_product_summary .price {
+    margin-bottom: 0px !important;
+    line-height: 40px;
+}
+.bundled_item_button input[type="number"] {
+	margin: 0;
+}
+.bundled_product_summary .details {
+    float: none !important;
+}
+.product-lightbox-inner .bundled_product_summary .details {
+    display: inline-block;
+    margin-bottom: 17px;
+}*/
+.woo_wholesale {
+    padding-top: 5px;
+}
+.product-info .woo_wholesale {
+    margin-bottom: 1.25em;
+    font-size: 120%;
+    color: #000000;
+    font-weight: bold;
+    line-height: 100%;
+        
+}
+.product-info .woo_retail {
+    font-size: 120%;
+    color: #777777;
+    font-weight: normal;
+    line-height: 100%;
+}
+.woo_retail_label, .woo_wholesale_label, .woo_savings_label {
+    /*border-top: 1px dotted #DDD;*/
+    padding: 7px 0;
+    font-size: 70%;
+    font-weight: normal;
+    color: #627f9a;
+}
+.woo_wholesale_label {
+
 }

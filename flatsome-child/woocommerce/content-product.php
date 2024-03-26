@@ -26,6 +26,12 @@ if ( ! $product->is_visible() ) {
 $post_id = $post->ID;
 $stock_status = get_post_meta($post_id, '_stock_status',true) == 'outofstock';
 
+//dgamoni visibility login user
+$zstore_product_hide = get_field('zstore_product_hide', $post_id);
+if ( $zstore_product_hide && !is_product_nohide()) {
+        return;
+}
+
 // run add to cart variation script
 if($product->is_type( array( 'variable', 'grouped') )) wp_enqueue_script('wc-add-to-cart-variation');
 
@@ -81,7 +87,8 @@ if($product->is_type( array( 'variable', 'grouped') )) wp_enqueue_script('wc-add
       </div><!-- end product-image -->
 </a>      	
 
-    <div class="info style-<?php echo $flatsome_opt['grid_style']; ?>">
+    <div class="info style-<?php echo $flatsome_opt['grid_style']; ?> custom_info">
+
 
 	<?php 
 	// GRID STYLE 1
@@ -107,7 +114,21 @@ if($product->is_type( array( 'variable', 'grouped') )) wp_enqueue_script('wc-add
      // GRID STYLE 2
      else if($flatsome_opt['grid_style'] == "grid2") { ?> 
           <?php do_action('woocommerce_before_shop_loop_item_title'); ?>
-          <a href="<?php the_permalink(); ?>"><p class="name"><?php the_title(); ?></p></a>
+	          <a href="<?php the_permalink(); ?>">
+	          	<p class="name">
+	          		<?php the_title(); ?>
+	          	</p>
+	          </a>
+
+			<!-- Manufacturer -->
+	          <?php $cur_terms = get_the_terms( $post->ID, 'product_brand' ); ?>
+	          <?php if ($cur_terms) { ?>
+		          <div class="product_meta">
+					<span class="tagged_as">Manufacturer: <?php echo '<a href="'. get_term_link( (int)$cur_terms[0]->term_id, $cur_terms[0]->taxonomy ) .'">'. $cur_terms[0]->name .'</a>';?></span>
+				  </div>
+			   <?php } ?>
+			<!-- end Manufacturer -->
+
           <?php do_action( 'woocommerce_after_shop_loop_item_title' ); ?>
      
 
