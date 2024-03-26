@@ -1,0 +1,31 @@
+/*
+Theme Name: Flatsome Child Theme
+Theme URI: http://flatsome.uxthemes.com/
+Description: This is a child theme for Flatsome
+Author: UX Themes
+Author URI: http: //www.uxthemes.com/
+Template: flatsome
+Version: 2.5
+*/
+
+/*************** ADD CUSTOM CSS HERE.   ***************/
+a {
+    color: #b2d235;
+}
+
+ul.header-nav li a {
+    text-transform: lowercase;
+    font-weight: normal;
+}
+
+ul.header-nav li.current-menu-item a.nav-top-link {
+    color: #b2d235;
+    opacity: 1;
+}
+
+
+@media only screen and (max-width: 48em) {
+/*************** ADD MOBILE ONLY CSS HERE  ***************/
+
+
+}
