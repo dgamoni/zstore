@@ -25,7 +25,7 @@ if($flatsome_opt['html_intro'] && is_front_page()) echo '<div class="home-intro"
 				<div class="large-12 columns">
 					<!-- left text -->
 					<div class="left-text left">
-						<div class="html"><?php echo do_shortcode('[google-translator]'); ?><span style="margin-left:5px;"><?php echo do_shortcode( $flatsome_opt['topbar_left']);?></span></div><!-- .html -->
+						<div class="html"><span style="margin-left:5px;"><?php echo do_shortcode( $flatsome_opt['topbar_left']);?></span></div><!-- .html -->
 					</div>
 					<!-- top bar right -->
 					<div class="right-text right">
@@ -66,9 +66,11 @@ if($flatsome_opt['html_intro'] && is_front_page()) echo '<div class="home-intro"
 					                        <?php } ?>
 					                        <?php if(function_exists('wc_get_account_menu_items') && $flatsome_opt['wc_account_links']){ ?>
 											    <?php foreach ( wc_get_account_menu_items() as $endpoint => $label ) : ?>
-													<li>
-														<a href="<?php echo esc_url( wc_get_account_endpoint_url( $endpoint ) ); ?>"><?php echo esc_html( $label ); ?></a>
-													</li>
+													<?php //if ($label != 'Downloads') : ?>
+														<li>
+															<a href="<?php echo esc_url( wc_get_account_endpoint_url( $endpoint ) ); ?>"><?php echo esc_html( $label ); ?></a>
+														</li>
+													<?php //endif; ?>
 												<?php endforeach; ?>
 											<?php } ?>
 											</ul>
@@ -96,11 +98,12 @@ if($flatsome_opt['html_intro'] && is_front_page()) echo '<div class="home-intro"
 										
 									<?php } ?>
 
-									<?php if($flatsome_opt['topbar_right']) { ?>
+									<?php //if($flatsome_opt['topbar_right']) { ?>
 									<li class="html-block">
-										<div class="html-block-inner"><?php echo do_shortcode($flatsome_opt['topbar_right']); ?></div>
+										<div class="html-block-inner"><?php echo do_shortcode('[google-translator]'); ?><?php //echo do_shortcode($flatsome_opt['topbar_right']); ?></div>
+										
 									</li>
-									<?php } ?>
+									<?php //} ?>
 							</ul>
 					</div><!-- top bar right -->
 

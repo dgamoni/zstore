@@ -109,6 +109,10 @@ aside#nav_menu-3 {
     margin-bottom: 0px;
 }
 
+.category_product_hide {
+    display: none;
+}
+
 /*mobil*/
 
 .mobilcart {
@@ -118,4 +122,20 @@ aside#nav_menu-3 {
     .mobilcart {
         display: block;
     }
+}
+
+.callout.style3 .inner .inner-text {
+    color: red !important;
+}
+
+.callout.style3 .inner {
+    border-color: red !important;
+}
+
+ul.brands {
+    list-style: none;
+}
+
+a.top {
+    display: none;
 }

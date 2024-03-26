@@ -4,6 +4,11 @@
 // include wholesale-pricing
 require_once 'woo-wholesale-pricing/index.php';
 
+// include widget
+require_once 'widget/woocommerce-brands/class-wc-widget-brand-thumbnails.php';
+require_once 'widget/class-wc-widget-product-categories.php';
+require_once 'widget/class-product-cat-list-walker.php';
+
 // Set a minimum dollar amount per order
 add_action( 'woocommerce_check_cart_items', 'spyr_set_min_total' );
 function spyr_set_min_total() {
@@ -139,4 +144,18 @@ function jk_woocommerce_available_variation( $args ) {
     return $args;
 }
 
+// update 9-08-16
 
+// function woocommerce_variation_prices_hash($price_hash, $product, $display) {
+//     if ( $display ) 
+//         $price_hash[] = $product->get_tax_class();
+//     return $price_hash;
+// }
+// add_filter( 'woocommerce_get_variation_prices_hash', 'woocommerce_variation_prices_hash', 10, 3 );
+
+function specialWholesaleTaxClass( $tax_class, $product ) {
+
+    $tax_class = 'Reduced Rate';
+    return $tax_class;
+}
+//add_filter( 'woocommerce_product_tax_class', 'specialWholesaleTaxClass', 1, 2 );

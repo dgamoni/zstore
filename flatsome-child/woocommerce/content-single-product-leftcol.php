@@ -2,6 +2,12 @@
  
 	global $post, $product, $flatsome_opt;
 
+    //dgamoni visibility login user
+    $zstore_product_hide = get_field('zstore_product_hide', $post->ID);
+    if ( $zstore_product_hide && !is_product_nohide()) {
+            return;
+    }
+
 	// Get category permalink
 	$permalinks 	= get_option( 'woocommerce_permalinks' );
 	$category_slug 	= empty( $permalinks['category_base'] ) ? _x( 'product-category', 'slug', 'woocommerce' ) : $permalinks['category_base'];

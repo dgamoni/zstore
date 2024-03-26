@@ -483,7 +483,7 @@ function wwo_global_max_spend() {
 	}
 }
 
-add_filter( 'woocommerce_product_tax_class', 'wwo_remove_wholesale_taxes', 1, 2 );
+//add_filter( 'woocommerce_product_tax_class', 'wwo_remove_wholesale_taxes', 1, 2 );
 function wwo_remove_wholesale_taxes( $tax_class, $product ) {
   global $wpdb;
 	$enabled = get_option('wwo_remove_wholesale_taxes');
